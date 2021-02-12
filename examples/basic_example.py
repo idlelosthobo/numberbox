@@ -23,9 +23,11 @@ other_period_data = [
 ]
 
 my_grid = parchments.Grid(row_index)
+
 my_grid.add_period(datetime(2020, 4, 1), period_data)
 my_grid.add_period(datetime(2020, 5, 1), other_period_data)
-my_grid.add_period(datetime(2020, 6, 1), period_data)
-my_grid.add_period(datetime(2020, 7, 1), other_period_data)
+
+my_grid.add_period(datetime(2021, 4, 1), other_period_data)
+my_grid.add_period(datetime(2021, 5, 1), period_data)
 
 print(my_grid.to_dict())

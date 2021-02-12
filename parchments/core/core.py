@@ -3,9 +3,9 @@ from datetime import datetime
 
 def period_key(period: datetime, iteration: str):
     if iteration == 'year':
-        return '%s' % period.year
+        return '%s0101' % period.strftime('%Y')
     if iteration == 'month':
-        return '%s-%s' % (period.year, period.month)
+        return '%s01' % period.strftime('%Y%m')
     if iteration == 'day':
-        return '%s-%s-%s' % (period.year, period.month, period.day)
+        return '%s' % period.strftime('%Y%m%d')
 

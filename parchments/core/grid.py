@@ -21,7 +21,7 @@ class Grid:
 
         self.row_dict = dict()
         for row in self.row_index:
-            self.row_dict[row[0]] = Row(row[0], row[1], row[2])
+            self.row_dict[row[0]] = Row(row[0], row[1], row[2], self.period_iteration, self.over_period_iteration)
 
     def add_period(self, period, value_list):
         if is_valid_date_or_datetime(period):
@@ -32,10 +32,10 @@ class Grid:
 
     def to_dict(self):
         grid_dict = dict()
-        grid_dict['data'] = dict()
+        grid_dict['row_data'] = dict()
         for row in self.row_index:
             # Todo: This is a bit lazy for assignment of block order list
-            grid_dict['index'] = self.row_dict[row[0]].block_order_list
-            grid_dict['data'][row[0]] = self.row_dict[row[0]].to_dict()
+            grid_dict['row_data'][row[0]] = self.row_dict[row[0]].as_dict()
+            grid_dict['column_index'] = self.row_dict[row[0]].block_order_list
         return grid_dict
 
