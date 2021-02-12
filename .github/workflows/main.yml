@@ -21,4 +21,4 @@ jobs:
           python-version: '3.x'
 
       - name: Run Test
-        run: python -m tests/grid_tests.py
+        run: python -m tests/grid_tests
