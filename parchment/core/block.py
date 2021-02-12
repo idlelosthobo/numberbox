@@ -9,11 +9,13 @@ class Block:
         self.value_type = value_type
         self.decimal_places = decimal_places
         self.actual_number = actual_number
+        self.growth_amount = 0.00
 
     def to_dict(self):
         block_dict = {
             'value': self.value,
-            'verbose': self.verbose()
+            'verbose': self.verbose(),
+            'growth_amount': self.growth_amount,
         }
         return block_dict
 
@@ -28,10 +30,10 @@ class Block:
             return self.value
 
     def compare_historical(self, historical_block):
-        pass
+        self.growth_amount = self.value - historical_block.value
 
     def compare_projected(self, projected_block):
-        pass
+        projected_block.compare_historical(self)
 
     def compare_historical_over(self, historical_over_block):
         pass

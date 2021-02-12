@@ -28,12 +28,14 @@ class Grid:
             if type(value_list) is list:
                 for loop_index, row in enumerate(self.row_index):
                     self.row_dict[row[0]].create_block(period_key(period, self.period_iteration), value_list[loop_index])
-                    print(self.row_dict[row[0]])
+                    self.row_dict[row[0]].update_row()
 
     def to_dict(self):
-        print(self.row_dict)
         grid_dict = dict()
+        grid_dict['data'] = dict()
         for row in self.row_index:
-            grid_dict[row[0]] = self.row_dict[row[0]].to_dict()
+            # Todo: This is a bit lazy for assignment of block order list
+            grid_dict['index'] = self.row_dict[row[0]].block_order_list
+            grid_dict['data'][row[0]] = self.row_dict[row[0]].to_dict()
         return grid_dict
 
