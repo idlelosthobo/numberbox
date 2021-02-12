@@ -21,4 +21,4 @@ jobs:
           python-version: '3.x'
 
       - name: Run Test
-        run: python -m parchments/tests/grid_tests
+        run: python -m unittest parchments/tests/grid_tests.py
