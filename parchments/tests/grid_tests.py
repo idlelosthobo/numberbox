@@ -33,3 +33,7 @@ class TestGrid(unittest.TestCase):
 
     def test_add_period_with_float_input(self):
         self.test_grid_add_period(index=[1, float(22.2), 0.70, 'bob'])
+
+    def test_add_period_with_zero_division_input(self):
+        self.test_grid_add_period(index=[1, 22.0, 0.70, 'bob'])
+        self.test_grid_add_period(index=[1, 0.0, 0.70, 'bob'])

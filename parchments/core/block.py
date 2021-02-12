@@ -21,7 +21,10 @@ class Block:
     def compare_historical(self, historical_block):
         if self.value_type != 'string':
             self.data['growth_amount'] = Value(self.value - historical_block.value, self.value_type, 2).as_dict()
-            self.data['growth_percentage'] = Value(self.data['growth_amount']['raw'] / historical_block.value, 'percentage', 4).as_dict()
+            try:
+                self.data['growth_percentage'] = Value(self.data['growth_amount']['raw'] / historical_block.value, 'percentage', 4).as_dict()
+            except ZeroDivisionError:
+                self.data['growth_percentage'] = 0
 
     def compare_projected(self, projected_block):
         projected_block.compare_historical(self)
@@ -29,7 +32,10 @@ class Block:
     def compare_over_historical(self, over_historical_block):
         if self.value_type != 'string':
             self.data['over_growth_amount'] = Value(self.value - over_historical_block.value, self.value_type, 2).as_dict()
-            self.data['over_growth_percentage'] = Value(self.data['over_growth_amount']['raw'] / over_historical_block.value, 'percentage', 4).as_dict()
+            try:
+                self.data['over_growth_percentage'] = Value(self.data['over_growth_amount']['raw'] / over_historical_block.value, 'percentage', 4).as_dict()
+            except ZeroDivisionError:
+                self.data['growth_percentage'] = 0
 
     def compare_over_projected(self, over_projected_block):
         over_projected_block.compare_over_historical(self)
