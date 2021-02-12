@@ -1,6 +1,5 @@
 from parchments.core.row import Row
-from parchments.core.core import period_key
-from parchments.core.validation import is_valid_date_or_datetime
+from parchments.core.period import Period
 from parchments.core.choices import PERIOD_ITERATION_CHOICES, OVER_PERIOD_ITERATION_CHOICES
 
 
@@ -23,12 +22,12 @@ class Grid:
         for row in self.row_index:
             self.row_dict[row[0]] = Row(row[0], row[1], row[2], self.period_iteration, self.over_period_iteration)
 
-    def add_period(self, period, value_list):
-        if is_valid_date_or_datetime(period):
-            if type(value_list) is list:
-                for loop_index, row in enumerate(self.row_index):
-                    self.row_dict[row[0]].create_block(period_key(period, self.period_iteration), value_list[loop_index])
-                    self.row_dict[row[0]].update_row()
+    def add_period(self, datetime, value_list):
+        period = Period(datetime, self.period_iteration)
+        if type(value_list) is list:
+            for loop_index, row in enumerate(self.row_index):
+                self.row_dict[row[0]].create_block(period, value_list[loop_index])
+                self.row_dict[row[0]].update_row()
 
     def to_dict(self):
         grid_dict = dict()

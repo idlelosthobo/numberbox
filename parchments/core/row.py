@@ -17,10 +17,10 @@ class Row:
         self.over_period_iteration = over_period_iteration
         self.block_dict = dict()
 
-    def create_block(self, period_key, value):
-        self.block_dict[period_key] = Block(period_key, value, self.value_type, self.value_decimals)
-        if period_key not in self.block_order_list:
-            self.block_order_list.append(period_key)
+    def create_block(self, period, value):
+        self.block_dict[period.key] = Block(period, value, self.value_type, self.value_decimals)
+        if period.key not in self.block_order_list:
+            self.block_order_list.append(period.key)
         self.block_order_list.sort()
 
     def update_row(self):
