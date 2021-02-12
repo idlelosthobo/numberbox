@@ -1,6 +1,6 @@
-from parchment.core.validation import is_valid_list_choice, is_valid_date_or_datetime
-from parchment.core.block import Block
-from parchment.core.choices import VALUE_TYPE_CHOICES
+from parchments.core.validation import is_valid_list_choice, is_valid_date_or_datetime
+from parchments.core.block import Block
+from parchments.core.choices import VALUE_TYPE_CHOICES
 
 
 class Row:

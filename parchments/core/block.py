@@ -1,4 +1,4 @@
-from parchment.core.choices import VALUE_TYPE_CHOICES
+from parchments.core.choices import VALUE_TYPE_CHOICES
 
 
 class Block:

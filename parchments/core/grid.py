@@ -1,7 +1,7 @@
-from parchment.core.row import Row
-from parchment.core.core import period_key
-from parchment.core.validation import is_valid_date_or_datetime
-from parchment.core.choices import PERIOD_ITERATION_CHOICES, OVER_PERIOD_ITERATION_CHOICES
+from parchments.core.row import Row
+from parchments.core.core import period_key
+from parchments.core.validation import is_valid_date_or_datetime
+from parchments.core.choices import PERIOD_ITERATION_CHOICES, OVER_PERIOD_ITERATION_CHOICES
 
 
 class Grid:

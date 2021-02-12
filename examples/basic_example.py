@@ -1,4 +1,4 @@
-import parchment
+import parchments
 from datetime import datetime
 
 row_index = (
@@ -22,7 +22,7 @@ other_period_data = [
     14,
 ]
 
-my_grid = parchment.Grid(row_index)
+my_grid = parchments.Grid(row_index)
 my_grid.add_period(datetime(2020, 4, 1), period_data)
 my_grid.add_period(datetime(2020, 5, 1), other_period_data)
 my_grid.add_period(datetime(2020, 6, 1), period_data)
