@@ -3,7 +3,7 @@ from decimal import Decimal
 class Value:
 
     def __init__(self, value, value_type, decimals=2):
-        self.data = {
+        self.data_dict = {
             'raw': value,
             'clean': value,
             'verbose': self.verbose(value, value_type),
@@ -24,4 +24,10 @@ class Value:
             return value
 
     def as_dict(self):
-        return self.data
+        return self.data_dict
+
+    def as_list(self):
+        value_list = list()
+        for key, val in self.data_dict.items():
+            value_list.append(val)
+        return value_list

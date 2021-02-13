@@ -30,4 +30,5 @@ my_grid.add_period(datetime(2020, 5, 1), other_period_data)
 my_grid.add_period(datetime(2021, 4, 1), other_period_data)
 my_grid.add_period(datetime(2021, 5, 1), period_data)
 
-print(my_grid.to_dict())
+print(my_grid.get_row('Debt').as_dict())
+

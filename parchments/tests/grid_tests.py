@@ -37,3 +37,29 @@ class TestGrid(unittest.TestCase):
     def test_add_period_with_zero_division_input(self):
         self.test_grid_add_period(index=[1, 22.0, 0.70, 'bob'])
         self.test_grid_add_period(index=[1, 0.0, 0.70, 'bob'])
+
+    def test_grid_as_dict(self):
+        try:
+            self.assertTrue(type(test_grid.as_dict()) is dict)
+        except:
+            self.assertTrue(False)
+
+    def test_grid_as_list(self):
+        try:
+            self.assertTrue(type(test_grid.as_list()) is list)
+        except:
+            self.assertTrue(False)
+
+    def test_grid_get_row(self):
+        try:
+            test_grid.get_row('goats')
+            self.assertTrue(True)
+        except:
+            self.assertTrue(False)
+
+    def test_grid_get_block(self):
+        try:
+            test_grid.get_block('goats', datetime.datetime.now())
+            self.assertTrue(True)
+        except:
+            self.assertTrue(False)

@@ -4,6 +4,7 @@ from parchments.core.choices import VALUE_TYPE_CHOICES
 
 
 class Row:
+
     block_order_list = list()
     period_iteration = None
     over_period_iteration = None
@@ -41,3 +42,16 @@ class Row:
         for block_order in self.block_order_list:
             row_list.append(self.block_dict[block_order].as_dict())
         return row_list
+
+    def as_list(self):
+        row_list = list()
+        for block_order in self.block_order_list:
+            row_list.append(self.block_dict[block_order].as_list())
+        return row_list
+
+    def get_block(self, column_index):
+        if column_index in self.block_order_list:
+            return self.block_dict[column_index]
+        else:
+            raise ValueError('Invalid column index. Your choices are %s' % self.block_order_list)
+

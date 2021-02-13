@@ -17,24 +17,46 @@ class Grid:
             raise SyntaxError('Invalid layer iteration choices %s' % OVER_PERIOD_ITERATION_CHOICES)
 
         self.row_index = row_index
-
+        self.column_index = list()
         self.row_dict = dict()
         for row in self.row_index:
             self.row_dict[row[0]] = Row(row[0], row[1], row[2], self.period_iteration, self.over_period_iteration)
 
     def add_period(self, datetime, value_list):
         period = Period(datetime, self.period_iteration)
+        self.column_index.append(period.key)
+        self.column_index.sort()
         if type(value_list) is list:
             for loop_index, row in enumerate(self.row_index):
                 self.row_dict[row[0]].create_block(period, value_list[loop_index])
                 self.row_dict[row[0]].update_row()
 
-    def to_dict(self):
+    def as_dict(self):
         grid_dict = dict()
+        grid_dict['column_index'] = self.column_index
         grid_dict['row_data'] = dict()
         for row in self.row_index:
-            # Todo: This is a bit lazy for assignment of block order list
             grid_dict['row_data'][row[0]] = self.row_dict[row[0]].as_dict()
-            grid_dict['column_index'] = self.row_dict[row[0]].block_order_list
         return grid_dict
+
+    def as_list(self):
+        grid_list = list()
+        grid_list.append(self.column_index)
+        for row in self.row_index:
+            grid_list.append(self.row_dict[row[0]].as_list())
+        return grid_list
+
+    def get_row(self, row_index_key):
+        if row_index_key in list(self.row_dict.keys()):
+            return self.row_dict[row_index_key]
+        else:
+            raise ValueError('Invalid row index. Your choices are %s' % list(self.row_dict.keys()))
+
+    def get_block(self, row_index_key, datetime):
+        period = Period(datetime, self.period_iteration)
+        if row_index_key in list(self.row_dict.keys()):
+            return self.row_dict[row_index_key].get_block(period.key)
+        else:
+            raise ValueError('Invalid row index. Your choices are %s' % list(self.row_dict.keys()))
+
 
