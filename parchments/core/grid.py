@@ -28,8 +28,11 @@ class Grid:
         self.column_index.sort()
         if type(value_list) is list:
             for loop_index, row in enumerate(self.row_index):
-                self.row_dict[row[0]].create_block(period, value_list[loop_index])
+                self.row_dict[row[0]].add_block(period, value_list[loop_index])
                 self.row_dict[row[0]].update_row()
+
+    def add_row(self, datetime, value_list):
+        self.add_period(datetime, value_list)
 
     def as_dict(self):
         grid_dict = dict()

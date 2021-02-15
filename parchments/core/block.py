@@ -12,8 +12,8 @@ class Block:
         self.data_dict = {
             'actual_number': self.actual_number,
             'period_key': self.period.key,
-            'value_amount': Value(value, value_type),
         }
+        self.add_value('value', value)
 
     def as_dict(self):
         block_dict = dict()
@@ -35,25 +35,35 @@ class Block:
 
     def compare_historical(self, historical_block):
         if self.value_type != 'string':
-            self.data_dict['growth_amount'] = Value(self.value - historical_block.value, self.value_type, 2)
+            self.add_value('growth_amount', self.value - historical_block.value)
             try:
-                self.data_dict['growth_percentage'] = Value(self.data_dict['growth_amount'].data_dict['raw'] / historical_block.value, 'percentage', 4)
+                self.add_value('growth_percentage', self.get_value('growth_amount') / historical_block.get_value('growth_amount'), 'percentage', 4)
             except ZeroDivisionError:
-                self.data_dict['growth_percentage'] = 0
+                self.add_value('growth_percentage', 0)
 
     def compare_projected(self, projected_block):
         projected_block.compare_historical(self)
 
     def compare_over_historical(self, over_historical_block):
         if self.value_type != 'string':
-            self.data_dict['over_growth_amount'] = Value(self.value - over_historical_block.value, self.value_type, 2)
+            self.add_value('over_growth_amount', self.value - over_historical_block.value)
             try:
-                self.data_dict['over_growth_percentage'] = Value(self.data_dict['over_growth_amount'].data_dict['raw'] / over_historical_block.value, 'percentage', 4)
+                self.add_value('over_growth_percentage', self.get_value('over_growth_amount') / over_historical_block.get_value('over_growth_amount'), 'percentage', 4)
             except ZeroDivisionError:
-                self.data_dict['growth_percentage'] = 0
+                self.add_value('over_growth_percentage', 0)
 
     def compare_over_projected(self, over_projected_block):
         over_projected_block.compare_over_historical(self)
 
     def calculate_growth(self, value1, value2):
         pass
+
+    def add_value(self, name, value, value_type=None, decimal_places=None):
+        if value_type is None:
+            value_type = self.value_type
+        if decimal_places is None:
+            decimal_places = self.decimal_places
+        self.data_dict[name] = Value(value, value_type, decimal_places)
+
+    def get_value(self, name):
+        return self.data_dict[name]

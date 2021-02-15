@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+
 class Value:
 
     def __init__(self, value, value_type, decimals=2):
@@ -10,6 +11,18 @@ class Value:
             'type': value_type,
             'decimals': decimals,
         }
+
+    def __truediv__(self, other):
+        return self.data_dict['raw'] / other.data_dict['raw']
+
+    def __mul__(self, other):
+        return self.data_dict['raw'] * other.data_dict['raw']
+
+    def __add__(self, other):
+        return self.data_dict['raw'] + other.data_dict['raw']
+
+    def __sub__(self, other):
+        return self.data_dict['raw'] - other.data_dict['raw']
 
     def verbose(self, value, value_type):
         if value == 0 or value == 0.0 or value == Decimal(0.0):
@@ -31,3 +44,4 @@ class Value:
         for key, val in self.data_dict.items():
             value_list.append(val)
         return value_list
+
