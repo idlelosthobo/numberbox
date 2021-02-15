@@ -1,4 +1,5 @@
 from parchments.core.value import Value
+import json
 
 
 class Block:
@@ -32,6 +33,9 @@ class Block:
             else:
                 block_list.append(val)
         return block_list
+
+    def as_json(self):
+        return json.dumps(self.as_dict())
 
     def compare_historical(self, historical_block):
         if self.value_type != 'string':

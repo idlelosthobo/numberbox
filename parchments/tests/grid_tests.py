@@ -8,6 +8,7 @@ test_index = (
     ('price', 'dollar', 2),
     ('value', 'percentage', 4),
     ('names', 'string', 0),
+    ('animal', 'bool', 0),
 )
 
 test_grid = parchments.Grid(test_index)
@@ -47,6 +48,12 @@ class TestGrid(unittest.TestCase):
     def test_grid_as_list(self):
         try:
             self.assertTrue(type(test_grid.as_list()) is list)
+        except:
+            self.assertTrue(False)
+
+    def test_grid_as_json(self):
+        try:
+            self.assertTrue(type(test_grid.as_json()) is list)
         except:
             self.assertTrue(False)
 

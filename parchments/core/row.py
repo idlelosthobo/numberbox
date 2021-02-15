@@ -1,6 +1,7 @@
 from parchments.core.validation import is_valid_list_choice, is_valid_date_or_datetime
 from parchments.core.block import Block
 from parchments.core.choices import VALUE_TYPE_CHOICES
+import json
 
 
 class Row:
@@ -17,14 +18,16 @@ class Row:
         self.period_iteration = period_iteration
         self.over_period_iteration = over_period_iteration
         self.block_dict = dict()
+        self.data_dict = dict()
 
     def add_block(self, period, value):
         self.block_dict[period.key] = Block(period, value, self.value_type, self.value_decimals)
         if period.key not in self.block_order_list:
             self.block_order_list.append(period.key)
         self.block_order_list.sort()
+        self.update()
 
-    def update_row(self):
+    def update(self):
         for loop_index, block_order in enumerate(self.block_order_list):
             if loop_index + 1 < len(self.block_order_list):
                 self.block_dict[block_order].compare_projected(self.block_dict[self.block_order_list[loop_index + 1]])
@@ -48,6 +51,9 @@ class Row:
         for block_order in self.block_order_list:
             row_list.append(self.block_dict[block_order].as_list())
         return row_list
+
+    def as_json(self):
+        return json.dumps(self.as_dict())
 
     def get_block(self, column_index):
         if column_index in self.block_order_list:

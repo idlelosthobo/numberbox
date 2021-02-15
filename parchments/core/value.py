@@ -1,4 +1,5 @@
 from decimal import Decimal
+import json
 
 
 class Value:
@@ -33,7 +34,12 @@ class Value:
             return '{:,.4f}%'.format((value * 100))
         elif value_type == 'int':
             return '{:,.0f}'.format(value)
-        else:
+        elif value_type == 'bool':
+            if value:
+                return 'True'
+            else:
+                return 'False'
+        elif value_type == 'string':
             return value
 
     def as_dict(self):
@@ -45,3 +51,5 @@ class Value:
             value_list.append(val)
         return value_list
 
+    def as_json(self):
+        return json.dumps(self.as_dict())
