@@ -3,7 +3,7 @@ import parchments
 import datetime
 import decimal
 
-test_index = (
+TEST_INDEX = (
     ('goats', 'int', 0),
     ('price', 'dollar', 2),
     ('value', 'percentage', 4),
@@ -11,7 +11,7 @@ test_index = (
     ('animal', 'bool', 0),
 )
 
-test_grid = parchments.Grid(test_index)
+test_grid = parchments.Grid(TEST_INDEX)
 
 
 class TestGrid(unittest.TestCase):
