@@ -7,10 +7,6 @@ import json
 
 class Row:
 
-    block_order_list = list()
-    period_iteration = None
-    over_period_iteration = None
-
     def __init__(self, name, value_type, value_decimals, period_iteration, over_period_iteration):
         if is_valid_list_choice(value_type, VALUE_TYPE_CHOICES):
             self.value_type = value_type
@@ -19,6 +15,7 @@ class Row:
         self.name = name
         self.period_iteration = period_iteration
         self.over_period_iteration = over_period_iteration
+        self.block_order_list = list()
         self.block_dict = dict()
         self.data_dict = dict()
 
