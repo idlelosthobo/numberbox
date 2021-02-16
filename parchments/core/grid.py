@@ -37,12 +37,12 @@ class Grid:
             for loop_index, row in enumerate(self.row_index):
                 self.row_dict[row[0]].add_block(period, value_list[loop_index])
 
-    def as_dict(self, verbose_only=False, sum=True, average=True):
+    def as_dict(self, verbose_only=False, sum=True, average=True, json_dump=False):
         grid_dict = dict()
         grid_dict['column_data'] = list()
 
         for column in self.column_index:
-            grid_dict['column_data'].append(self.column_dict[column].as_dict(verbose_only))
+            grid_dict['column_data'].append(self.column_dict[column].as_dict(verbose_only, json_dump=json_dump))
 
         grid_dict['row_data'] = dict()
 
@@ -61,7 +61,7 @@ class Grid:
         return grid_list
 
     def as_json(self, verbose_only=False):
-        return json.dumps(self.as_dict(verbose_only))
+        return json.dumps(self.as_dict(verbose_only, json_dump=True))
 
     def as_html(self):
         pass

@@ -70,7 +70,7 @@ class Value:
         elif self.data_dict['type'] == 'string':
             self.data_dict['verbose'] = self.data_dict['raw']
 
-    def as_dict(self, verbose_only=False):
+    def as_dict(self, verbose_only=False, json_dump=False):
         if verbose_only:
             return {
                 'verbose': self.data_dict['verbose'],

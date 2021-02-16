@@ -47,17 +47,17 @@ class Row:
                 else:
                     self.block_dict[block_order].compare_over_historical(self.block_dict[block_order])
 
-    def as_dict(self, verbose_only=False, sum=True, average=True):
+    def as_dict(self, verbose_only=False, sum=True, average=True, json_dump=False):
         row_list = list()
 
         for block_order in self.block_order_list:
-            row_list.append(self.block_dict[block_order].as_dict(verbose_only))
+            row_list.append(self.block_dict[block_order].as_dict(verbose_only, json_dump=json_dump))
 
         if sum:
-            row_list.append({ 'sum': self.data_dict['sum'].as_dict(verbose_only) })
+            row_list.append({ 'sum': self.data_dict['sum'].as_dict(verbose_only, json_dump=json_dump) })
 
         if average:
-            row_list.append({ 'average': self.data_dict['average'].as_dict(verbose_only) })
+            row_list.append({ 'average': self.data_dict['average'].as_dict(verbose_only, json_dump=json_dump) })
 
         return row_list
 
@@ -72,7 +72,7 @@ class Row:
         return row_list
 
     def as_json(self, verbose_only=False):
-        return json.dumps(self.as_dict(verbose_only))
+        return json.dumps(self.as_dict(verbose_only, json_dump=True))
 
     def get_block(self, column_index):
         if column_index in self.block_order_list:

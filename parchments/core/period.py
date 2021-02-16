@@ -37,9 +37,15 @@ class Period:
     def key(self):
         return self.data_dict['key']
 
-    def as_dict(self, verbose_only=False):
+    def as_dict(self, verbose_only=False, json_dump=False):
         if verbose_only:
             return {
+                'verbose': self.data_dict['verbose'],
+                'verbose_numeric': self.data_dict['verbose_numeric'],
+            }
+        elif json_dump:
+            return {
+                'key': self.data_dict['verbose'],
                 'verbose': self.data_dict['verbose'],
                 'verbose_numeric': self.data_dict['verbose_numeric'],
             }

@@ -16,7 +16,7 @@ class Block:
         }
         self.add_value('value', value)
 
-    def as_dict(self, verbose_only=False):
+    def as_dict(self, verbose_only=False, json_dump=False):
         block_dict = dict()
         for key, val in self.data_dict.items():
             if type(val) is Value:
