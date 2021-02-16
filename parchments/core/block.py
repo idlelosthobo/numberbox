@@ -1,4 +1,5 @@
 from parchments.core.value import Value
+import decimal
 import json
 
 
@@ -42,7 +43,7 @@ class Block:
             self.add_value('growth_amount', self.value - historical_block.value)
             try:
                 self.add_value('growth_percentage', self.get_value('growth_amount').raw / historical_block.get_value('value').raw, 'percentage', 4)
-            except ZeroDivisionError:
+            except (ZeroDivisionError, decimal.DecimalException) as error:
                 self.add_value('growth_percentage', 0)
 
     def compare_over_historical(self, over_historical_block):
@@ -50,7 +51,7 @@ class Block:
             self.add_value('over_growth_amount', self.value - over_historical_block.value)
             try:
                 self.add_value('over_growth_percentage', self.get_value('over_growth_amount').raw / over_historical_block.get_value('value').raw, 'percentage', 4)
-            except ZeroDivisionError:
+            except (ZeroDivisionError, decimal.DecimalException) as error:
                 self.add_value('over_growth_percentage', 0)
 
     def calculate_growth(self, value1, value2):
