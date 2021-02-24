@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from calendar import monthrange
 
 
 class Period:
@@ -14,8 +15,41 @@ class Period:
         self.iteration = iteration
 
         if self.iteration == 'year':
-            self.key = '%s0101' % self.datetime.strftime('%Y')
+            self.key = self.datetime.strftime('%Y0101')
         if self.iteration == 'month':
-            self.key = '%s01' % self.datetime.strftime('%Y%m')
+            self.key = self.datetime.strftime('%Y%m01')
         if self.iteration == 'day':
-            self.key = '%s' % self.datetime.strftime('%Y%m%d')
+            self.key = self.datetime.strftime('%Y%m%d')
+
+    def next_period(self):
+        if self.iteration == 'year':
+            return Period(datetime(self.datetime.year + 1, self.datetime.month, 1), self.iteration)
+        if self.iteration == 'month':
+            return Period(
+                datetime(self.datetime.year + int(self.datetime.month / 12), ((self.datetime.month % 12) + 1), 1),
+                self.iteration)
+        if self.iteration == 'day':
+            if self.datetime.day + 1 > monthrange(self.datetime.year, self.datetime.month)[
+                    1] and self.datetime.month != 12:
+                return Period(datetime(self.datetime.year, self.datetime.month + 1, 1), self.iteration)
+            elif self.datetime.day + 1 > monthrange(self.datetime.year, self.datetime.month)[
+                    1] and self.datetime.month == 12:
+                return Period(datetime(self.datetime.year + 1, 1, 1), self.iteration)
+            else:
+                return Period(datetime(self.datetime.year, self.datetime.month, self.datetime.day + 1), self.iteration)
+
+    def previous_period(self):
+        if self.iteration == 'year':
+            return Period(datetime(self.datetime.year - 1, self.datetime.month, 1), self.iteration)
+        if self.iteration == 'month':
+            if self.datetime.month - 1 == 0:
+                return Period(datetime(self.datetime.year - 1, 12, 1), self.iteration)
+            else:
+                return Period(datetime(self.datetime.year, self.datetime.month - 1, 1), self.iteration)
+        if self.iteration == 'day':
+            if self.datetime.day - 1 == 0 and self.datetime.month == 1:
+                return Period(datetime(self.datetime.year - 1, 12, monthrange(self.datetime.year - 1, 12)[1]), self.iteration)
+            elif self.datetime.day - 1 == 0 and self.datetime.month != 1:
+                return Period(datetime(self.datetime.year, self.datetime.month - 1, monthrange(self.datetime.year - 1, 12)[1]), self.iteration)
+            else:
+                return Period(datetime(self.datetime.year, self.datetime.month, self.datetime.day - 1), self.iteration)
