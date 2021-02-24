@@ -20,5 +20,8 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Run Test
+      - name: Grid Testing
         run: python -m unittest parchments/tests/grid_tests.py
+
+      - name: Math Testing
+        run: python -m unittest parchments/tests/math_tests.py

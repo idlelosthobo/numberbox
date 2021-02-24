@@ -1,4 +1,6 @@
 from parchments.core.value import Value
+import decimal
+import json
 
 
 class Block:
@@ -15,16 +17,16 @@ class Block:
         }
         self.add_value('value', value)
 
-    def as_dict(self):
+    def as_dict(self, verbose_only=False, json_dump=False):
         block_dict = dict()
         for key, val in self.data_dict.items():
             if type(val) is Value:
-                block_dict[key] = val.as_dict()
+                block_dict[key] = val.as_dict(verbose_only)
             else:
                 block_dict[key] = val
         return block_dict
 
-    def as_list(self):
+    def as_list(self, verbose_only=False):
         block_list = list()
         for key, val in self.data_dict.items():
             if type(val) is Value:
@@ -33,27 +35,24 @@ class Block:
                 block_list.append(val)
         return block_list
 
+    def as_json(self, verbose_only=False):
+        return json.dumps(self.as_dict(verbose_only))
+
     def compare_historical(self, historical_block):
-        if self.value_type != 'string':
+        if self.value_type not in ('string', 'bool'):
             self.add_value('growth_amount', self.value - historical_block.value)
             try:
-                self.add_value('growth_percentage', self.get_value('growth_amount') / historical_block.get_value('growth_amount'), 'percentage', 4)
-            except ZeroDivisionError:
+                self.add_value('growth_percentage', self.get_value('growth_amount').raw / historical_block.get_value('value').raw, 'percentage', 4)
+            except (ZeroDivisionError, decimal.DecimalException) as error:
                 self.add_value('growth_percentage', 0)
 
-    def compare_projected(self, projected_block):
-        projected_block.compare_historical(self)
-
     def compare_over_historical(self, over_historical_block):
-        if self.value_type != 'string':
+        if self.value_type not in ('string', 'bool'):
             self.add_value('over_growth_amount', self.value - over_historical_block.value)
             try:
-                self.add_value('over_growth_percentage', self.get_value('over_growth_amount') / over_historical_block.get_value('over_growth_amount'), 'percentage', 4)
-            except ZeroDivisionError:
+                self.add_value('over_growth_percentage', self.get_value('over_growth_amount').raw / over_historical_block.get_value('value').raw, 'percentage', 4)
+            except (ZeroDivisionError, decimal.DecimalException) as error:
                 self.add_value('over_growth_percentage', 0)
-
-    def compare_over_projected(self, over_projected_block):
-        over_projected_block.compare_over_historical(self)
 
     def calculate_growth(self, value1, value2):
         pass
