@@ -21,7 +21,10 @@ jobs:
           python-version: '3.x'
 
       - name: Grid Testing
-        run: python -m unittest parchments/tests/grid_tests.py
+        run: python -m unittest parchments/test/test_grid.py
 
       - name: Math Testing
-        run: python -m unittest parchments/tests/math_tests.py
+        run: python -m unittest parchments/test/test_math.py
+
+      - name: Period Testing
+        run: python -m unittest parchments/test/test_period.py
