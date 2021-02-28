@@ -29,7 +29,7 @@ class Grid:
     def add_period(self, datetime, value_list):
         period = Period(datetime, self.period_iteration)
 
-        self.column_index.append(period.key)
+        self.column_index.append(period)
         self.column_index.sort()
         self.column_dict[period.key] = period
 
@@ -42,7 +42,7 @@ class Grid:
         grid_dict['column_data'] = list()
 
         for column in self.column_index:
-            grid_dict['column_data'].append(self.column_dict[column].as_dict(verbose_only, json_dump=json_dump))
+            grid_dict['column_data'].append(self.column_dict[column.key].as_dict(verbose_only, json_dump=json_dump))
 
         grid_dict['row_data'] = dict()
 
@@ -80,3 +80,10 @@ class Grid:
         else:
             raise ValueError('Invalid row index. Your choices are %s' % list(self.row_dict.keys()))
 
+    def project_period(self, datetime, value_list):
+        self.add_period(datetime, value_list)
+
+    def project_missing(self, method='linear'):
+        for column in self.column_index:
+            if column:
+                pass

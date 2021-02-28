@@ -28,8 +28,23 @@ class Period:
             self.data_dict['verbose_numeric'] = self.data_dict['datetime'].strftime('%Y-%m-01')
         if self.data_dict['iteration'] == 'day':
             self.data_dict['key'] = self.data_dict['datetime'].strftime('%Y%m%d')
-            self.data_dict['verbose'] = self.data_dict['datetime'].strftime('%b %-d %Y')
+            self.data_dict['verbose'] = self.data_dict['datetime'].strftime('%b %d %Y')
             self.data_dict['verbose_numeric'] = self.data_dict['datetime'].strftime('%Y-%m-%d')
+
+    def __eq__(self, other):
+        return self.data_dict['key'] == other.data_dict['key']
+
+    def __ge__(self, other):
+        return self.data_dict['key'] >= self.data_dict['key']
+
+    def __gt__(self, other):
+        return self.data_dict['key'] > self.data_dict['key']
+
+    def __le__(self, other):
+        return self.data_dict['key'] <= self.data_dict['key']
+
+    def __lt__(self, other):
+        return self.data_dict['key'] < self.data_dict['key']
 
     def __str__(self):
         return self.data_dict['key']
