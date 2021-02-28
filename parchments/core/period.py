@@ -32,19 +32,19 @@ class Period:
             self.data_dict['verbose_numeric'] = self.data_dict['datetime'].strftime('%Y-%m-%d')
 
     def __eq__(self, other):
-        return self.data_dict['key'] == other.data_dict['key']
+        return self.key_as_int() == other.key_as_int()
 
     def __ge__(self, other):
-        return self.data_dict['key'] >= self.data_dict['key']
+        return self.key_as_int() >= other.key_as_int()
 
     def __gt__(self, other):
-        return self.data_dict['key'] > self.data_dict['key']
+        return self.key_as_int() > other.key_as_int()
 
     def __le__(self, other):
-        return self.data_dict['key'] <= self.data_dict['key']
+        return self.key_as_int() <= other.key_as_int()
 
     def __lt__(self, other):
-        return self.data_dict['key'] < self.data_dict['key']
+        return self.key_as_int() < other.key_as_int()
 
     def __str__(self):
         return self.data_dict['key']
@@ -52,6 +52,9 @@ class Period:
     @property
     def key(self):
         return self.data_dict['key']
+
+    def key_as_int(self):
+        return int(self.data_dict['key'])
 
     def as_dict(self, verbose_only=False, json_dump=False):
         if verbose_only:
@@ -93,6 +96,7 @@ class Period:
             else:
                 return datetime(current_datetime.year, current_datetime.month, current_datetime.day + 1)
 
+    @property
     def next_period(self):
         return Period(self.next_datetime(), self.data_dict['iteration'])
 
@@ -113,6 +117,7 @@ class Period:
             else:
                 return datetime(current_datetime.year, current_datetime.month, current_datetime.day - 1)
 
+    @property
     def previous_period(self):
         return Period(self.previous_datetime(), self.data_dict['iteration'])
 

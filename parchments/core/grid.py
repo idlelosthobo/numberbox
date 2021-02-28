@@ -37,6 +37,14 @@ class Grid:
             for loop_index, row in enumerate(self.row_index):
                 self.row_dict[row[0]].add_block(period, value_list[loop_index])
 
+    def get_period_value_list(self, period):
+        value_list = list()
+
+        for row in self.row_index:
+            value_list.append(self.row_dict[row[0]].get_block(period.key).data_dict['value'].raw)
+
+        return value_list
+
     def as_dict(self, verbose_only=False, sum=True, average=True, json_dump=False):
         grid_dict = dict()
         grid_dict['column_data'] = list()
@@ -80,10 +88,15 @@ class Grid:
         else:
             raise ValueError('Invalid row index. Your choices are %s' % list(self.row_dict.keys()))
 
-    def project_period(self, datetime, value_list):
-        self.add_period(datetime, value_list)
+    def project_period(self, period, method='linear'):
+        if period.next_period not in self.column_index:
+            if method == 'linear':
+                self.add_period(period.next_period.data_dict['datetime'], self.get_period_value_list(period))
+                # Todo: Fix this infinite loop
+                # print(period.key)
+                # self.project_period(period.next_period)
 
     def project_missing(self, method='linear'):
-        for column in self.column_index:
-            if column:
-                pass
+        column_index = list(self.column_index)
+        for column in column_index:
+            self.project_period(column)

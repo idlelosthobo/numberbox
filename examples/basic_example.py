@@ -47,6 +47,8 @@ my_grid.add_period(datetime(2020, 5, 1), other_period_data)
 my_grid.add_period(datetime(2021, 4, 1), other_period_data)
 my_grid.add_period(datetime(2021, 5, 1), period_data)
 
+my_grid.project_missing()
+
 my_grid_dict = my_grid.as_dict(verbose_only=True)
 
 # for column in my_grid_dict['column_data']:
@@ -55,9 +57,11 @@ my_grid_dict = my_grid.as_dict(verbose_only=True)
 # for row in my_grid_dict['row_data']:
 #     print(row)
 #
-pprint.pprint(my_grid.column_index[0].key)
-pprint.pprint(my_grid.column_index[0].next_period().key)
-pprint.pprint(my_grid.column_index[0].previous_period().key)
+# pprint.pprint(my_grid.column_index[0].key)
+# pprint.pprint(my_grid.column_index[0].next_period().key)
+# pprint.pprint(my_grid.column_index[0].previous_period().key)
+
+pprint.pprint(my_grid_dict)
 
 # print(my_grid_dict['column_index'][0])
 # print(my_grid_dict['row_data']['Debt'][0]['value']['verbose'])
