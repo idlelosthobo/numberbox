@@ -88,15 +88,14 @@ class Grid:
         else:
             raise ValueError('Invalid row index. Your choices are %s' % list(self.row_dict.keys()))
 
-    def project_period(self, period, method='linear'):
-        if period.next_period not in self.column_index:
+    def project_period(self, period, column_index, method='linear'):
+        if period.next_period not in column_index:
             if method == 'linear':
                 self.add_period(period.next_period.data_dict['datetime'], self.get_period_value_list(period))
-                # Todo: Fix this infinite loop
-                # print(period.key)
-                # self.project_period(period.next_period)
+                self.project_period(period.next_period, column_index, method)
 
     def project_missing(self, method='linear'):
         column_index = list(self.column_index)
-        for column in column_index:
-            self.project_period(column)
+        for index, column in enumerate(column_index):
+            if index < len(column_index) - 1:
+                self.project_period(column, column_index)
