@@ -49,7 +49,7 @@ my_grid.add_period(datetime(2021, 5, 1), period_data)
 
 my_grid.project_missing()
 
-my_grid_dict = my_grid.as_dict(verbose_only=True)
+my_grid_dict = my_grid.as_dict(verbose_only=False)
 
 # for column in my_grid_dict['column_data']:
 #     print(column)
