@@ -5,14 +5,14 @@ import json
 
 class Block:
 
-    def __init__(self, period, value, value_type: str, decimal_places=0, actual_number=True):
+    def __init__(self, period, value, value_type: str, decimal_places=0, actual_value=True):
         self.period = period
         self.value = value
         self.value_type = value_type
         self.decimal_places = decimal_places
-        self.actual_number = actual_number
+        self.actual_value = actual_value
         self.data_dict = {
-            'actual_number': self.actual_number,
+            'actual_value': self.actual_value,
             'period_key': self.period.key,
         }
         self.add_value('value', value)
