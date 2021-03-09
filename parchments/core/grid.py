@@ -26,7 +26,7 @@ class Grid:
         for row in self.row_index:
             self.row_dict[row[0]] = Row(row[0], row[1], row[2], self.period_iteration, self.over_period_iteration)
 
-    def add_period(self, datetime, value_list):
+    def add_period(self, datetime, value_list, actual_value=True):
         period = Period(datetime, self.period_iteration)
 
         self.column_index.append(period)
@@ -35,7 +35,7 @@ class Grid:
 
         if type(value_list) is list:
             for loop_index, row in enumerate(self.row_index):
-                self.row_dict[row[0]].add_block(period, value_list[loop_index])
+                self.row_dict[row[0]].add_block(period, value_list[loop_index], actual_value)
 
     def get_period_value_list(self, period):
         value_list = list()
@@ -88,14 +88,26 @@ class Grid:
         else:
             raise ValueError('Invalid row index. Your choices are %s' % list(self.row_dict.keys()))
 
-    def project_period(self, period, column_index, method='linear'):
+    def project_missing_period(self, period, column_index, method='linear'):
         if period.next_period not in column_index:
             if method == 'linear':
-                self.add_period(period.next_period.data_dict['datetime'], self.get_period_value_list(period))
-                self.project_period(period.next_period, column_index, method)
+                self.add_period(period.next_period.data_dict['datetime'], self.get_period_value_list(period), False)
+                self.project_missing_period(period.next_period, column_index, method)
 
     def project_missing(self, method='linear'):
         column_index = list(self.column_index)
         for index, column in enumerate(column_index):
             if index < len(column_index) - 1:
-                self.project_period(column, column_index)
+                self.project_missing_period(column, column_index)
+
+    def project_future(self, period_datetime, method='linear'):
+        latest_period = self.column_index[len(self.column_index) - 1]
+        while latest_period < Period(period_datetime, self.period_iteration):
+            self.add_period(latest_period.next_period.data_dict['datetime'], self.get_period_value_list(latest_period), False)
+            latest_period = latest_period.next_period
+
+    def project_past(self, period_datetime, method='linear'):
+        earliest_period = self.column_index[0]
+        while earliest_period > Period(period_datetime, self.period_iteration):
+            self.add_period(earliest_period.previous_period.data_dict['datetime'], self.get_period_value_list(earliest_period), False)
+            earliest_period = earliest_period.previous_period

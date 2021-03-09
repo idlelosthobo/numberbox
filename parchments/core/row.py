@@ -19,8 +19,8 @@ class Row:
         self.block_dict = dict()
         self.data_dict = dict()
 
-    def add_block(self, period, value):
-        self.block_dict[period.key] = Block(period, value, self.value_type, self.value_decimals)
+    def add_block(self, period, value, actual_value=True):
+        self.block_dict[period.key] = Block(period, value, self.value_type, self.value_decimals, actual_value)
 
         if period.key not in self.block_order_list:
             self.block_order_list.append(period.key)
