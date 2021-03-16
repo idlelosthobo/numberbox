@@ -20,8 +20,8 @@ class Grid:
         self.row_index = row_index
         self.row_dict = dict()
 
-        self.column_index = list()
-        self.column_dict = dict()
+        self.period_index = list()
+        self.period_dict = dict()
 
         for row in self.row_index:
             self.row_dict[row[0]] = Row(row[0], row[1], row[2], self.period_iteration, self.over_period_iteration)
@@ -29,9 +29,9 @@ class Grid:
     def add_period(self, datetime, value_list, actual_value=True):
         period = Period(datetime, self.period_iteration)
 
-        self.column_index.append(period)
-        self.column_index.sort()
-        self.column_dict[period.key] = period
+        self.period_index.append(period)
+        self.period_index.sort()
+        self.period_dict[period.key] = period
 
         if type(value_list) is list:
             for loop_index, row in enumerate(self.row_index):
@@ -47,10 +47,10 @@ class Grid:
 
     def as_dict(self, verbose_only=False, sum=True, average=True, json_dump=False):
         grid_dict = dict()
-        grid_dict['column_data'] = list()
+        grid_dict['period_data'] = list()
 
-        for column in self.column_index:
-            grid_dict['column_data'].append(self.column_dict[column.key].as_dict(verbose_only, json_dump=json_dump))
+        for period in self.period_index:
+            grid_dict['period_data'].append(self.period_dict[period.key].as_dict(verbose_only, json_dump=json_dump))
 
         grid_dict['row_data'] = dict()
 
@@ -61,7 +61,7 @@ class Grid:
 
     def as_list(self, verbose_only=False):
         grid_list = list()
-        grid_list.append(self.column_index)
+        grid_list.append(self.period_index)
 
         for row in self.row_index:
             grid_list.append(self.row_dict[row[0]].as_list())
@@ -88,26 +88,28 @@ class Grid:
         else:
             raise ValueError('Invalid row index. Your choices are %s' % list(self.row_dict.keys()))
 
-    def project_missing_period(self, period, column_index, method='linear'):
-        if period.next_period not in column_index:
+    def project_missing_period(self, period, period_index, method='linear'):
+        if period.next_period not in period_index:
             if method == 'linear':
                 self.add_period(period.next_period.data_dict['datetime'], self.get_period_value_list(period), False)
-                self.project_missing_period(period.next_period, column_index, method)
+                self.project_missing_period(period.next_period, period_index, method)
+            if method == 'median':
+                pass
 
     def project_missing(self, method='linear'):
-        column_index = list(self.column_index)
-        for index, column in enumerate(column_index):
-            if index < len(column_index) - 1:
-                self.project_missing_period(column, column_index)
+        period_index = list(self.period_index)
+        for index, period in enumerate(period_index):
+            if index < len(period_index) - 1:
+                self.project_missing_period(period, period_index)
 
     def project_future(self, period_datetime, method='linear'):
-        latest_period = self.column_index[len(self.column_index) - 1]
+        latest_period = self.period_index[len(self.period_index) - 1]
         while latest_period < Period(period_datetime, self.period_iteration):
             self.add_period(latest_period.next_period.data_dict['datetime'], self.get_period_value_list(latest_period), False)
             latest_period = latest_period.next_period
 
     def project_past(self, period_datetime, method='linear'):
-        earliest_period = self.column_index[0]
+        earliest_period = self.period_index[0]
         while earliest_period > Period(period_datetime, self.period_iteration):
             self.add_period(earliest_period.previous_period.data_dict['datetime'], self.get_period_value_list(earliest_period), False)
             earliest_period = earliest_period.previous_period

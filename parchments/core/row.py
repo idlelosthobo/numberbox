@@ -71,11 +71,11 @@ class Row:
     def as_json(self, verbose_only=False):
         return json.dumps(self.as_dict(verbose_only, json_dump=True))
 
-    def get_block(self, column_index):
-        if column_index in self.block_order_list:
-            return self.block_dict[column_index]
+    def get_block(self, period_index):
+        if period_index in self.block_order_list:
+            return self.block_dict[period_index]
         else:
-            raise ValueError('Invalid column index. Your choices are %s' % self.block_order_list)
+            raise ValueError('Invalid period index. Your choices are %s' % self.block_order_list)
 
     def update_sum_and_average(self, value):
         if 'sum' in self.data_dict:

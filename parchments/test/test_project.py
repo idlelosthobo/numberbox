@@ -50,5 +50,5 @@ class TestMath(unittest.TestCase):
         self.assertFalse(test_grid.as_dict()['row_data']['goats'][3]['value']['raw'] == 300)
 
     def test_project_missing_date(self):
-        self.assertTrue(test_grid.column_index[3].key == '20190701')
-        self.assertFalse(test_grid.column_index[3].key == '20190801')
+        self.assertTrue(test_grid.period_index[3].key == '20190701')
+        self.assertFalse(test_grid.period_index[3].key == '20190801')
