@@ -88,3 +88,6 @@ class Row:
         else:
             self.data_dict['average'] = Value('-', self.value_type, self.value_decimals)
 
+    def calculate_median_percentage(self):
+        pass
+
