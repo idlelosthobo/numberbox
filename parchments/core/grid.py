@@ -105,7 +105,7 @@ class Grid:
             self.add_period(latest_period.next_period.data_dict['datetime'], self.get_period_value_list(latest_period), False)
             latest_period = latest_period.next_period
         if method == 'median':
-            self.process_median()
+            self.process_median_future()
 
     def project_past(self, period_datetime, method='linear'):
         earliest_period = self.period_index[0]
@@ -115,32 +115,33 @@ class Grid:
 
     # This only works with future projections that have at least 2 actual periods first
     # Need to make it work for missing and past projections
-    def process_median(self):
+    def process_median_future(self):
         for row in self.row_index:
             if row[1] in ('dollar', 'int', 'percentage'):
-                projected_period_length = 0
                 last_block = None
-                current_block = None
                 median_percentage = None
-                print(row)
+                # print(row)
+
                 for index, period in enumerate(self.period_index):
                     current_block = self.row_dict[row[0]].get_block(period.key)
+
                     if current_block.is_actual_value:
-                        print('Actual %s' % current_block.value.verbose)
+                        # print('Actual %s' % current_block.value.verbose)
                         if last_block:
                             if last_block.is_actual_value:
                                 if median_percentage:
                                     median_percentage = (median_percentage + current_block.get_value('growth_percentage').raw) / 2
                                 else:
                                     median_percentage = current_block.get_value('growth_percentage').raw
-                                print('Growth %s' % median_percentage)
+
+                                # print('Growth %s' % median_percentage)
                     else:
                         current_block.value.update(last_block.value.raw * (median_percentage + 1.00))
-                        print('Projected %s' % current_block.value.verbose)
-
+                        # print('Projected %s' % current_block.value.verbose)
 
                     if last_block:
-                        print('Last Block %s' % last_block.value.verbose)
+                        pass
+                        # print('Last Block %s' % last_block.value.verbose)
 
                     last_block = self.row_dict[row[0]].get_block(period.key)
-                    print('-' * 30)
+                    # print('-' * 30)
