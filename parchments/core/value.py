@@ -43,9 +43,11 @@ class Value:
         self.data_dict['raw'] = self.__sub__(other)
         self.update()
 
-    def update(self):
+    def update(self, raw=None):
+        if raw:
+            self.data_dict['raw'] = raw
         self.clean()
-        self.verbose()
+        self.generate_verbose()
 
     def clean(self):
         if type(self.data_dict['type']) == 'dollar' or type(self.data_dict['type']) == 'percentage':
@@ -53,7 +55,7 @@ class Value:
         else:
             self.data_dict['clean'] = self.data_dict['raw']
 
-    def verbose(self):
+    def generate_verbose(self):
         if self.data_dict['raw'] in (0, 0.0, Decimal(0.0)):
             self.data_dict['verbose'] = '-'
         elif self.data_dict['type'] == 'dollar':
@@ -90,3 +92,7 @@ class Value:
     @property
     def raw(self):
         return self.data_dict['raw']
+
+    @property
+    def verbose(self):
+        return self.data_dict['verbose']

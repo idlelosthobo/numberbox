@@ -8,13 +8,12 @@ VALUE_TYPE_CHOICES = [
 
 PERIOD_ITERATION_CHOICES = [
     'year',
-    'quarter',
     'month',
     'day'
 ]
 
 OVER_PERIOD_ITERATION_CHOICES = [
     'year',
-    'quarter',
     'month',
+    'day'
 ]

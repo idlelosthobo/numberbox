@@ -22,14 +22,18 @@ class Period:
             self.data_dict['key'] = self.data_dict['datetime'].strftime('%Y0101')
             self.data_dict['verbose'] = self.data_dict['datetime'].strftime('%Y')
             self.data_dict['verbose_numeric'] = self.data_dict['datetime'].strftime('%Y-01-01')
-        if self.data_dict['iteration'] == 'month':
+        elif self.data_dict['iteration'] == 'month':
             self.data_dict['key'] = self.data_dict['datetime'].strftime('%Y%m01')
             self.data_dict['verbose'] = self.data_dict['datetime'].strftime('%b %Y')
             self.data_dict['verbose_numeric'] = self.data_dict['datetime'].strftime('%Y-%m-01')
-        if self.data_dict['iteration'] == 'day':
+        elif self.data_dict['iteration'] == 'day':
             self.data_dict['key'] = self.data_dict['datetime'].strftime('%Y%m%d')
             self.data_dict['verbose'] = self.data_dict['datetime'].strftime('%b %d %Y')
             self.data_dict['verbose_numeric'] = self.data_dict['datetime'].strftime('%Y-%m-%d')
+        else:
+            from parchments.core.choices import PERIOD_ITERATION_CHOICES
+            raise ValueError('Invalid period iteration choice "%s" must be one of the following %s' % (
+            self.data_dict['iteration'], PERIOD_ITERATION_CHOICES))
 
     def __eq__(self, other):
         return self.key_as_int() == other.key_as_int()
@@ -84,14 +88,17 @@ class Period:
         current_datetime = self.data_dict['datetime']
         if self.data_dict['iteration'] == 'year':
             return datetime(current_datetime.year + 1, current_datetime.month, 1)
+
         if self.data_dict['iteration'] == 'month':
-            return datetime(current_datetime.year + int(current_datetime.month / 12), ((current_datetime.month % 12) + 1), 1)
+            return datetime(current_datetime.year + int(current_datetime.month / 12),
+                            ((current_datetime.month % 12) + 1), 1)
+
         if self.data_dict['iteration'] == 'day':
             if current_datetime.day + 1 > monthrange(current_datetime.year, current_datetime.month)[
-                    1] and current_datetime.month != 12:
+                1] and current_datetime.month != 12:
                 return datetime(current_datetime.year, current_datetime.month + 1, 1)
             elif current_datetime.day + 1 > monthrange(current_datetime.year, current_datetime.month)[
-                    1] and current_datetime.month == 12:
+                1] and current_datetime.month == 12:
                 return datetime(current_datetime.year + 1, 1, 1)
             else:
                 return datetime(current_datetime.year, current_datetime.month, current_datetime.day + 1)
@@ -104,20 +111,22 @@ class Period:
         current_datetime = self.data_dict['datetime']
         if self.data_dict['iteration'] == 'year':
             return datetime(current_datetime.year - 1, current_datetime.month, 1)
+
         if self.data_dict['iteration'] == 'month':
             if current_datetime.month - 1 == 0:
                 return datetime(current_datetime.year - 1, 12, 1)
             else:
                 return datetime(current_datetime.year, current_datetime.month - 1, 1)
+
         if self.data_dict['iteration'] == 'day':
             if current_datetime.day - 1 == 0 and current_datetime.month == 1:
                 return datetime(current_datetime.year - 1, 12, monthrange(current_datetime.year - 1, 12)[1])
             elif current_datetime.day - 1 == 0 and current_datetime.month != 1:
-                return datetime(current_datetime.year, current_datetime.month - 1, monthrange(current_datetime.year - 1, 12)[1])
+                return datetime(current_datetime.year, current_datetime.month - 1,
+                                monthrange(current_datetime.year - 1, 12)[1])
             else:
                 return datetime(current_datetime.year, current_datetime.month, current_datetime.day - 1)
 
     @property
     def previous_period(self):
         return Period(self.previous_datetime(), self.data_dict['iteration'])
-

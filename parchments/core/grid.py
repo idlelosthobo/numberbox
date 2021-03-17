@@ -88,13 +88,10 @@ class Grid:
         else:
             raise ValueError('Invalid row index. Your choices are %s' % list(self.row_dict.keys()))
 
-    def project_missing_period(self, period, period_index, method='linear'):
+    def project_missing_period(self, period, period_index):
         if period.next_period not in period_index:
-            if method == 'linear':
-                self.add_period(period.next_period.data_dict['datetime'], self.get_period_value_list(period), False)
-                self.project_missing_period(period.next_period, period_index, method)
-            if method == 'median':
-                pass
+            self.add_period(period.next_period.data_dict['datetime'], self.get_period_value_list(period), False)
+            self.project_missing_period(period.next_period, period_index)
 
     def project_missing(self, method='linear'):
         period_index = list(self.period_index)
@@ -107,9 +104,43 @@ class Grid:
         while latest_period < Period(period_datetime, self.period_iteration):
             self.add_period(latest_period.next_period.data_dict['datetime'], self.get_period_value_list(latest_period), False)
             latest_period = latest_period.next_period
+        if method == 'median':
+            self.process_median()
 
     def project_past(self, period_datetime, method='linear'):
         earliest_period = self.period_index[0]
         while earliest_period > Period(period_datetime, self.period_iteration):
             self.add_period(earliest_period.previous_period.data_dict['datetime'], self.get_period_value_list(earliest_period), False)
             earliest_period = earliest_period.previous_period
+
+    # This only works with future projections that have at least 2 actual periods first
+    # Need to make it work for missing and past projections
+    def process_median(self):
+        for row in self.row_index:
+            if row[1] in ('dollar', 'int', 'percentage'):
+                projected_period_length = 0
+                last_block = None
+                current_block = None
+                median_percentage = None
+                print(row)
+                for index, period in enumerate(self.period_index):
+                    current_block = self.row_dict[row[0]].get_block(period.key)
+                    if current_block.is_actual_value:
+                        print('Actual %s' % current_block.value.verbose)
+                        if last_block:
+                            if last_block.is_actual_value:
+                                if median_percentage:
+                                    median_percentage = (median_percentage + current_block.get_value('growth_percentage').raw) / 2
+                                else:
+                                    median_percentage = current_block.get_value('growth_percentage').raw
+                                print('Growth %s' % median_percentage)
+                    else:
+                        current_block.value.update(last_block.value.raw * (median_percentage + 1.00))
+                        print('Projected %s' % current_block.value.verbose)
+
+
+                    if last_block:
+                        print('Last Block %s' % last_block.value.verbose)
+
+                    last_block = self.row_dict[row[0]].get_block(period.key)
+                    print('-' * 30)
