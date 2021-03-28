@@ -45,10 +45,9 @@ test_grid.project_past(datetime.datetime(2018, 10, 1))
 test_grid.project_future(datetime.datetime(2022, 3, 1))
 
 
-class TestMath(unittest.TestCase):
+class TestProject(unittest.TestCase):
 
     def test_project_past_value(self):
-        print(test_grid.as_dict(verbose_only=True))
         self.assertTrue(test_grid.as_dict()['row_data']['goats'][9]['value']['raw'] == 200)
         self.assertFalse(test_grid.as_dict()['row_data']['goats'][9]['value']['raw'] == 300)
 
@@ -57,7 +56,6 @@ class TestMath(unittest.TestCase):
         self.assertFalse(test_grid.period_index[9].key == '20190101')
 
     def test_project_missing_value(self):
-        print(test_grid.as_dict(verbose_only=True))
         self.assertTrue(test_grid.as_dict()['row_data']['goats'][9]['value']['raw'] == 200)
         self.assertFalse(test_grid.as_dict()['row_data']['goats'][9]['value']['raw'] == 300)
 
@@ -66,7 +64,6 @@ class TestMath(unittest.TestCase):
         self.assertFalse(test_grid.period_index[9].key == '20190801')
 
     def test_project_future_value(self):
-        print(test_grid.as_dict(verbose_only=True))
         self.assertTrue(test_grid.as_dict()['row_data']['goats'][33]['value']['raw'] == 100)
         self.assertFalse(test_grid.as_dict()['row_data']['goats'][33]['value']['raw'] == 200)
 

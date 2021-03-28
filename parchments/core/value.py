@@ -50,8 +50,10 @@ class Value:
         self.generate_verbose()
 
     def clean(self):
-        if type(self.data_dict['type']) == 'dollar' or type(self.data_dict['type']) == 'percentage':
+        if self.data_dict['type'] == 'dollar' or self.data_dict['type'] == 'percentage':
             self.data_dict['clean'] = round(self.data_dict['raw'], self.data_dict['decimals'])
+        elif self.data_dict['type'] == 'int':
+            self.data_dict['clean'] = int(self.data_dict['raw'])
         else:
             self.data_dict['clean'] = self.data_dict['raw']
 
